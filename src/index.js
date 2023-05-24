@@ -10,8 +10,6 @@ const DEBOUNCE_DELAY = 500;
 
 const searchForm = document.querySelector('.search-form');
 const searchInput = document.querySelector('input');
-const btnSubmit = document.querySelector('button');
-const searchList = document.querySelector('.search-list');
 const gallery = document.querySelector('.gallery');
 
 searchForm.addEventListener('submit', debounce(onSubmitForm, DEBOUNCE_DELAY));
@@ -62,8 +60,8 @@ async function fetchImages(query = '', page = 1, per_page = 40) {
 
   try {
     const response = await axios.get(`${BASE_URL}?${params}`);
-    // console.log(response);
-    return response;
+    console.log(response.data);
+    createMarkupOfImages(response.data);
   } catch (error) {
     console.log(error);
   }
