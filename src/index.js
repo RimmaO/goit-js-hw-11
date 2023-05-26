@@ -2,17 +2,15 @@ import './css/styles.css';
 
 import axios from 'axios'; //-HTTP
 import Notiflix from 'notiflix'; //-Error
-import debounce from 'lodash.debounce'; //-Delay
+
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css'; //-Image
-
-const DEBOUNCE_DELAY = 500;
 
 const searchForm = document.querySelector('.search-form');
 const searchInput = document.querySelector('input');
 const gallery = document.querySelector('.gallery');
 
-searchForm.addEventListener('submit', debounce(onSubmitForm, DEBOUNCE_DELAY));
+searchForm.addEventListener('submit', onSubmitForm);
 
 function onSubmitForm(event) {
   event.preventDefault();
