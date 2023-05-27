@@ -16,14 +16,14 @@ function onSubmitForm(event) {
   event.preventDefault();
 
   const query = searchInput.value.trim();
-  gallery.innerHTML('');
 
   if (query === '') {
     Notiflix.Notify.failure('Please write your query');
     return;
   }
-  fetchImages(query, page, per_page)
+  fetchImages(query)
     .then(data => {
+      createMarkupOfImages.innerHTML = '';
       if (data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -56,17 +56,14 @@ async function fetchImages(query = '', page = 1, per_page = 40) {
     per_page: `${per_page}`,
   });
 
-  try {
-    const response = await axios.get(`${BASE_URL}?${params}`);
-    console.log(response.data);
-    createMarkupOfImages(response.data);
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await axios.get(`${BASE_URL}?${params}`);
+  console.log(response.data);
+
+  return response;
 }
 
 function createMarkupOfImages(images) {
-  const markupOfImages = images
+  return images
     .map(
       ({
         webformatURL,
@@ -76,8 +73,8 @@ function createMarkupOfImages(images) {
         view,
         comments,
         downloads,
-      }) => {
-        return `
+      }) =>
+        `
       <div class="photo-card">
         <a class="photo-link link" href="${largeImageURL}">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -102,10 +99,7 @@ function createMarkupOfImages(images) {
           </p>
           
         </div>
-      </div>`;
-      }
+      </div>`
     )
     .join('');
-
-  return markupOfImages;
 }
