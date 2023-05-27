@@ -1,8 +1,7 @@
 import './css/styles.css';
+import { fetchImages } from './fetchImages';
 
-import axios from 'axios'; //-HTTP
 import Notiflix from 'notiflix'; //-Error
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css'; //-Image
 
@@ -11,6 +10,10 @@ const searchInput = document.querySelector('input');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
 let page = 1;
+
+/**
+ * create infinity scroll
+ */
 
 let options = {
   root: null,
@@ -36,6 +39,10 @@ function onPagination(entries, observer) {
     }
   });
 }
+
+/**
+ * 3 add event on btn
+ */
 
 searchForm.addEventListener('submit', onSubmitForm);
 
@@ -82,23 +89,10 @@ function onSubmitForm(event) {
     });
 }
 
-async function fetchImages(query) {
-  const BASE_URL = 'https://pixabay.com/api/';
-  const params = new URLSearchParams({
-    key: '36648375-8210797ad77555d82512d73b2',
-    q: `${query}`,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-    // page: `${page}`,
-    // per_page: `${per_page}`,
-  });
-
-  const response = await axios.get(`${BASE_URL}?${params}`);
-  console.log(response);
-
-  return response;
-}
+/**
+ * 
+ 2 create markup for gallery
+ */
 
 function createMarkupOfImages(images) {
   return images
@@ -143,6 +137,9 @@ function createMarkupOfImages(images) {
     .join('');
 }
 
+/**
+ * create smooth scroll
+ */
 function smoothScroll() {
   const { height: cardHeight } = document
     .querySelector('.gallery')
