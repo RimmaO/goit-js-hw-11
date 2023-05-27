@@ -18,18 +18,25 @@ function onSubmitForm(event) {
   const query = searchInput.value.trim();
 
   if (query === '') {
-    Notiflix.Notify.failure('Please write your query');
+    Notiflix.Notify.info(
+      'The search string cannot be empty. Please write your search query.'
+    );
     return;
   }
-  fetchImages(query)
-    .then(data => {
-      createMarkupOfImages.innerHTML = '';
+
+  fetchImages(query);
+  try {
+    data => {
       if (data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
       } else {
-        gallery.insertAdjacentHTML('beforeend', createMarkupOfImages(images));
+        console.log(data);
+        gallery.insertAdjacentHTML(
+          'beforeend',
+          createMarkupOfImages(data.data.hits)
+        );
         const lightbox = new SimpleLightbox('.gallery a', {
           captionsData: 'alt',
           captionPosition: 'bottom',
@@ -37,14 +44,14 @@ function onSubmitForm(event) {
         }).refresh();
         Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       }
-    })
-    .catch(error => console.log(error))
-    .finally(() => {
-      searchForm.reset();
-    });
+    };
+  } catch (error) {
+    console.log(error);
+  }
+  searchForm.reset();
 }
 
-async function fetchImages(query = '', page = 1, per_page = 40) {
+async function fetchImages(query, page, per_page) {
   const BASE_URL = 'https://pixabay.com/api/';
   const params = new URLSearchParams({
     key: '36648375-8210797ad77555d82512d73b2',
@@ -57,7 +64,7 @@ async function fetchImages(query = '', page = 1, per_page = 40) {
   });
 
   const response = await axios.get(`${BASE_URL}?${params}`);
-  console.log(response.data);
+  // console.log(response.data);
 
   return response;
 }
@@ -73,8 +80,8 @@ function createMarkupOfImages(images) {
         view,
         comments,
         downloads,
-      }) =>
-        `
+      }) => {
+        return `
       <div class="photo-card">
         <a class="photo-link link" href="${largeImageURL}">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -99,7 +106,8 @@ function createMarkupOfImages(images) {
           </p>
           
         </div>
-      </div>`
+      </div>`;
+      }
     )
     .join('');
 }

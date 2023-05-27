@@ -1,3 +1,30 @@
-.list {
-  list-style: none;
+.search-form {
+  padding: 0 20px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  display: inline-flex;
+  height: 50px;
+  border-radius: 50px;
+  overflow: hidden;
+  background-color: white;
+}
+.search-form-txt {
+  font-size: 20px;
+  border: none;
+  outline: none;
+  width: 200px;
+  padding-right: 10px;
+  background-color: transparent;
+}
+.search-form-btn {
+  border: none;
+  background-color: transparent;
+}
+.search-form-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: pointer;
 }
