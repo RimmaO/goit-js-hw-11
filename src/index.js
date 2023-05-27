@@ -90,8 +90,7 @@ function onSubmitForm(event) {
 }
 
 /**
- * 
- 2 create markup for gallery
+ * 2 create markup for gallery
  */
 
 function createMarkupOfImages(images) {
