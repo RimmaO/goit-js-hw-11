@@ -20,35 +20,6 @@ let page = 1;
 let query = '';
 
 /**
- * create infinity scroll
- */
-
-let options = {
-  root: null,
-  rootMargin: '500px',
-  threshold: 0,
-};
-
-let observer = new IntersectionObserver(onPagination, options);
-
-function onPagination(entries, observer) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      page += 1;
-      fetchImages(query, page).then(data => {
-        gallery.insertAdjacentHTML(
-          'beforeend',
-          createMarkupOfImages(data.data.hits)
-        );
-        if (data.data.page * 40 >= data.data.totalHits) {
-          observer.unobserve(guard);
-        }
-      });
-    }
-  });
-}
-
-/**
  * 3 add event on btn
  */
 
@@ -56,10 +27,11 @@ searchForm.addEventListener('submit', onSubmitForm);
 
 function onSubmitForm(event) {
   event.preventDefault();
-
+  page = 1;
   observer.observe(guard);
 
   gallery.innerHTML = '';
+
   query = searchInput.value.trim();
 
   if (query === '') {
@@ -82,6 +54,7 @@ function onSubmitForm(event) {
         );
 
         lightbox.refresh();
+
         Notiflix.Notify.success(
           `Hooray! We found ${data.data.totalHits} images.`
         );
@@ -152,5 +125,42 @@ function smoothScroll() {
   window.scrollBy({
     top: cardHeight * 2,
     behavior: 'smooth',
+  });
+}
+
+/**
+ * create infinity scroll
+ */
+
+let options = {
+  root: null,
+  rootMargin: '500px',
+  threshold: 0,
+};
+
+let observer = new IntersectionObserver(onLoadMore, options);
+
+function onLoadMore(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      page += 1;
+
+      fetchImages(query, page).then(data => {
+        gallery.insertAdjacentHTML(
+          'beforeend',
+          createMarkupOfImages(data.data.hits)
+        );
+
+        lightbox.refresh();
+
+        if (data.data.page * 40 >= data.data.totalHits) {
+          observer.unobserve(guard);
+
+          Notiflix.Notify.failure(
+            "We're sorry, but you've reached the end of search results."
+          );
+        }
+      });
+    }
   });
 }
