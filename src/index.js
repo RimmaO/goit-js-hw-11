@@ -9,7 +9,9 @@ const searchForm = document.querySelector('.search-form');
 const searchInput = document.querySelector('input');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
+
 let page = 1;
+let query = '';
 
 /**
  * create infinity scroll
@@ -27,7 +29,7 @@ function onPagination(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       page += 1;
-      fetchImages(page).then(data => {
+      fetchImages(query).then(data => {
         gallery.insertAdjacentHTML(
           'beforeend',
           createMarkupOfImages(data.data.hits)
@@ -52,7 +54,7 @@ function onSubmitForm(event) {
   observer.observe(guard);
 
   gallery.innerHTML = '';
-  const query = searchInput.value.trim();
+  query = searchInput.value.trim();
 
   if (query === '') {
     Notiflix.Notify.info(
@@ -61,7 +63,7 @@ function onSubmitForm(event) {
     return;
   }
 
-  fetchImages(query)
+  fetchImages(query, page)
     .then(data => {
       if (data.data.totalHits === 0) {
         Notiflix.Notify.failure(

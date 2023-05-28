@@ -3,8 +3,8 @@ import axios from 'axios'; //-HTTP
 /**
  * 1 get API
  */
-
-async function fetchImages(query = '', page = 1, per_page = 40) {
+let per_page = 40;
+async function fetchImages(query = '', page = 1) {
   const BASE_URL = 'https://pixabay.com/api/';
   const params = new URLSearchParams({
     key: '36648375-8210797ad77555d82512d73b2',
