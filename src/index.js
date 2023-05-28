@@ -10,6 +10,12 @@ const searchInput = document.querySelector('input');
 const gallery = document.querySelector('.gallery');
 const guard = document.querySelector('.guard');
 
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
 let page = 1;
 let query = '';
 
@@ -29,7 +35,7 @@ function onPagination(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       page += 1;
-      fetchImages(query).then(data => {
+      fetchImages(query, page).then(data => {
         gallery.insertAdjacentHTML(
           'beforeend',
           createMarkupOfImages(data.data.hits)
@@ -75,11 +81,7 @@ function onSubmitForm(event) {
           createMarkupOfImages(data.data.hits)
         );
 
-        const lightbox = new SimpleLightbox('.gallery a', {
-          captionsData: 'alt',
-          captionPosition: 'bottom',
-          captionDelay: 250,
-        }).refresh();
+        lightbox.refresh();
         Notiflix.Notify.success(
           `Hooray! We found ${data.data.totalHits} images.`
         );
