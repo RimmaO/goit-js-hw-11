@@ -27,12 +27,12 @@ function onPagination(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       page += 1;
-      fetchImages(page).then(data => {
+      fetchImages(page, (per_page = 40)).then(data => {
         gallery.insertAdjacentHTML(
           'beforeend',
           createMarkupOfImages(data.data.hits)
         );
-        if (data.data.totalHits <= data.page) {
+        if (data.data.page * per_page < data.data.totalHits) {
           observer.unobserve(guard);
         }
       });
@@ -48,6 +48,9 @@ searchForm.addEventListener('submit', onSubmitForm);
 
 function onSubmitForm(event) {
   event.preventDefault();
+
+  page = 1;
+  createMarkupOfImages.innerHTML = '';
 
   const query = searchInput.value.trim();
 
