@@ -58,7 +58,7 @@ function onSubmitForm(event) {
         Notiflix.Notify.success(
           `Hooray! We found ${data.data.totalHits} images.`
         );
-        smoothScroll();
+
         observer.observe(guard);
       }
     })
@@ -153,7 +153,7 @@ function onLoadMore(entries, observer) {
         );
 
         lightbox.refresh();
-
+        smoothScroll();
         const totalPages = Math.ceil(data.data.totalHits / 40);
 
         if (page >= totalPages) {
