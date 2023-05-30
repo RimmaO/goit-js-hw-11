@@ -153,9 +153,10 @@ function onLoadMore(entries, observer) {
 
         lightbox.refresh();
 
-        if (data.data.page * 40 >= data.data.totalHits) {
+        const totalPages = Math.ceil(data.totalHits / 40);
+
+        if (page >= totalPages) {
           observer.unobserve(guard);
-          searchForm.removeEventListener('submit', onSubmitForm);
 
           Notiflix.Notify.failure(
             "We're sorry, but you've reached the end of search results."
