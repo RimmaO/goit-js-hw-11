@@ -19,7 +19,7 @@ async function fetchImages(query, page) {
   });
 
   const response = await axios.get(`${BASE_URL}?${params}`);
-  console.log(response);
+  // console.log(response);
 
   return response;
 }

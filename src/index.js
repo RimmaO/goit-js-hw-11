@@ -27,10 +27,11 @@ searchForm.addEventListener('submit', onSubmitForm);
 
 function onSubmitForm(event) {
   event.preventDefault();
+
+  observer.unobserve(guard);
+
   page = 1;
-
   gallery.innerHTML = '';
-
   query = searchInput.value.trim();
 
   if (query === '') {
@@ -153,7 +154,7 @@ function onLoadMore(entries, observer) {
 
         lightbox.refresh();
 
-        const totalPages = Math.ceil(data.totalHits / 40);
+        const totalPages = Math.ceil(data.data.totalHits / 40);
 
         if (page >= totalPages) {
           observer.unobserve(guard);
