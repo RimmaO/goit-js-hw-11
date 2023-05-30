@@ -28,7 +28,6 @@ searchForm.addEventListener('submit', onSubmitForm);
 function onSubmitForm(event) {
   event.preventDefault();
   page = 1;
-  observer.observe(guard);
 
   gallery.innerHTML = '';
 
@@ -59,6 +58,7 @@ function onSubmitForm(event) {
           `Hooray! We found ${data.data.totalHits} images.`
         );
         smoothScroll();
+        observer.observe(guard);
       }
     })
     .catch(error => console.log(error))
@@ -155,6 +155,7 @@ function onLoadMore(entries, observer) {
 
         if (data.data.page * 40 >= data.data.totalHits) {
           observer.unobserve(guard);
+          searchForm.removeEventListener('submit', onSubmitForm);
 
           Notiflix.Notify.failure(
             "We're sorry, but you've reached the end of search results."
