@@ -18,6 +18,7 @@ const lightbox = new SimpleLightbox('.gallery a', {
 
 let page = 1;
 let query = '';
+let totalPages = 0;
 
 /**
  * 3 add event on btn
@@ -145,6 +146,14 @@ function onLoadMore(entries, observer) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       page += 1;
+      if (page >= totalPages) {
+        observer.unobserve(guard);
+
+        Notiflix.Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        );
+        return;
+      }
 
       fetchImages(query, page).then(data => {
         gallery.insertAdjacentHTML(
@@ -154,15 +163,7 @@ function onLoadMore(entries, observer) {
 
         lightbox.refresh();
         smoothScroll();
-        const totalPages = Math.ceil(data.data.totalHits / 40);
-
-        if (page >= totalPages) {
-          observer.unobserve(guard);
-
-          Notiflix.Notify.failure(
-            "We're sorry, but you've reached the end of search results."
-          );
-        }
+        totalPages = Math.ceil(data.data.totalHits / 40);
       });
     }
   });
